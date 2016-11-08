@@ -1,0 +1,104 @@
+{
+  "project_info": {
+    "project_number": "381146945585",
+    "firebase_url": "https://bloodaid-5ee7f.firebaseio.com",
+    "project_id": "bloodaid-5ee7f",
+    "storage_bucket": "bloodaid-5ee7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381146945585:android:abd520e2e33f0224",
+        "android_client_info": {
+          "package_name": "com.ravis.bloodaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381146945585-948k2tbjhq7rk753g8oge9iiuk7ruvg8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwHTB7-orUHdPDQ27SK66n5xHRC8URq60"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381146945585:android:d4a18b37f5d1dda8",
+        "android_client_info": {
+          "package_name": "ravis.bloodaid.activity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381146945585-948k2tbjhq7rk753g8oge9iiuk7ruvg8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwHTB7-orUHdPDQ27SK66n5xHRC8URq60"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381146945585:android:a6e78041dbf8b27b",
+        "android_client_info": {
+          "package_name": "ravis.bloodaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381146945585-948k2tbjhq7rk753g8oge9iiuk7ruvg8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwHTB7-orUHdPDQ27SK66n5xHRC8URq60"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
