@@ -104,7 +104,7 @@
                 android:id="@+id/spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/common_plus_signin_btn_text_light_default"
+                android:background="@color/white"
                 android:textAlignment="center"
                 android:prompt="@string/spinner_title"
                 />
