@@ -14,39 +14,33 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Build;
+
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+
 import android.util.Log;
-import android.view.KeyEvent;
+
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.maps.model.LatLng;
 
-import java.lang.reflect.Array;
+import com.android.volley.toolbox.StringRequest;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
-import static ravis.bloodaid.R.id.view;
 
 public class Outview1 extends Activity {
 
@@ -91,12 +85,12 @@ public class Outview1 extends Activity {
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                String email= getemail(position);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String email = ((TextView)view.findViewById(R.id.email)).getText().toString().trim();
+                Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
                 Location(email);
 
-                notification(email,position);
+                notification(email,view);
 
             }
         });
@@ -160,12 +154,12 @@ public class Outview1 extends Activity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    public String getemail(int position) {
-        View childView = lv.getChildAt(position);
-        TextView text = (TextView) childView.findViewById(R.id.email);
-        String email = text.getText().toString().trim();
-        return email;
-    }
+    //public String getemail(long id) {
+      //  View childView = lv.getSelectedItem(id);
+       // TextView text = (TextView) childView.findViewById(R.id.email);
+        //String email = text.getText().toString().trim();
+        //return email;
+    //}
 
 
     private void showpDialog() {
@@ -219,9 +213,9 @@ public class Outview1 extends Activity {
                                     R.id.email, R.id.mobile, R.id.spinner});
 
                             lv.setAdapter(adapter);
-                            Toast.makeText(getApplicationContext(),
-                                    "Click on entity for getting location", Toast.LENGTH_SHORT).show();
                         }
+                    Toast.makeText(getApplicationContext(),
+                            "Click on entity for getting location", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -261,15 +255,15 @@ public class Outview1 extends Activity {
     }
 
 
-    public String getspinner(int paramInt)
+    public String getspinner(View view)
     {
-        return ((TextView)this.lv.getChildAt(paramInt).findViewById(R.id.spinner)).getText().toString().trim();
+        return ((TextView)view.findViewById(R.id.spinner)).getText().toString().trim();
     }
 
-    public void notification(final String paramString, int paramInt)
+    public void notification(final String paramString, final View view)
     {
         String tag_string_req = "snd..notification";
-        final String str1 = getspinner(paramInt);
+        final String str1 = getspinner(view);
         final Object localObject = this.db.getUserDetails();
         final String str2 = (String)((HashMap)localObject).get("name");
         final String str3 = (String)((HashMap)localObject).get("email");
@@ -318,6 +312,10 @@ public class Outview1 extends Activity {
                 return localHashMap;
             }
         };
+        strReq.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req );
     }
 }
