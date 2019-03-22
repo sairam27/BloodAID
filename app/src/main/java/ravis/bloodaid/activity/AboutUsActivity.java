@@ -4,7 +4,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -12,8 +11,6 @@ import android.widget.ImageView;
 import ravis.bloodaid.R;
 
 public class AboutUsActivity extends AppCompatActivity  {
-
-    private ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +24,10 @@ public class AboutUsActivity extends AppCompatActivity  {
         int imageWidth = options.outWidth;
         String imageType = options.outMimeType;
 
-        image =(ImageView)findViewById(R.id.imageView2);
+        ImageView image = findViewById(R.id.imageView2);
 
         image.setImageBitmap(
-                decodeSampledBitmapFromResource(getResources(), R.drawable.aboutus, 500, 708));
+                decodeSampledBitmapFromResource(getResources()));
     }
 
     @Override
@@ -50,7 +47,7 @@ public class AboutUsActivity extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-    public static int calculateInSampleSize(
+    private static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
@@ -73,19 +70,18 @@ public class AboutUsActivity extends AppCompatActivity  {
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                         int reqWidth, int reqHeight) {
+    private static Bitmap decodeSampledBitmapFromResource(Resources res) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
+        BitmapFactory.decodeResource(res, R.drawable.aboutus, options);
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inSampleSize = calculateInSampleSize(options, 500, 708);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
+        return BitmapFactory.decodeResource(res, R.drawable.aboutus, options);
     }
 }

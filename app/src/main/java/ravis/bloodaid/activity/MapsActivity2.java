@@ -22,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -37,11 +36,9 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         LocationListener {
 
 
-    private GoogleMap mMap;
     private SQLiteHandler db;
-    private ProgressDialog pDialog;
-    GoogleApiClient mGoogleApiClient;
-    Marker mCurrLocationMarker;
+    private GoogleApiClient mGoogleApiClient;
+    private Marker mCurrLocationMarker;
     private static final String TAG = MapsActivity2.class.getSimpleName();
 
     public void onBackPressed() {
@@ -58,7 +55,7 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps2);
 
-        pDialog = new ProgressDialog(this);
+        ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
         db = new SQLiteHandler(getApplicationContext());
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -82,17 +79,16 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         HashMap<String, String> loc = db.getLocationDetails();
 
         String latitude = (loc.get("latitude"));
         String longitude = (loc.get("longitude"));
         if(!latitude.equals("null")&& !longitude.equals("null")) {
             LatLng sydney = new LatLng(Double.valueOf(longitude), Double.valueOf(latitude));
-            mMap.addMarker(new MarkerOptions().position(sydney).title("Donor Location dude"));
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(sydney));
+            googleMap.addMarker(new MarkerOptions().position(sydney).title("Donor Location dude"));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(sydney));
         }else{
             Toast.makeText(getApplicationContext(),
                    "No location provided", Toast.LENGTH_SHORT).show();
@@ -105,17 +101,17 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
-                mMap.setMyLocationEnabled(true);
+                googleMap.setMyLocationEnabled(true);
             }
         }
         else {
             buildGoogleApiClient();
-            mMap.setMyLocationEnabled(true);
+            googleMap.setMyLocationEnabled(true);
         }
     }
 
 
-    protected synchronized void buildGoogleApiClient() {
+    private synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -123,8 +119,8 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                 .build();
         mGoogleApiClient.connect();
     }
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    public boolean checkLocationPermission(){
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private void checkLocationPermission(){
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -149,9 +145,6 @@ public class MapsActivity2 extends FragmentActivity implements OnMapReadyCallbac
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
-            return false;
-        } else {
-            return true;
         }
     }
 

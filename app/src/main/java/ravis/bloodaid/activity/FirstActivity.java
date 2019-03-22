@@ -14,8 +14,6 @@ import ravis.bloodaid.R;
 
 public class FirstActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
-    private Button btnLogin;
-    private Button btnLinkToRegister;
 
 
     @Override
@@ -23,8 +21,8 @@ public class FirstActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first);
 
-        btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegisterScreen);
+        Button btnLogin = findViewById(R.id.btnLogin);
+        Button btnLinkToRegister = findViewById(R.id.btnLinkToRegisterScreen);
 
 
 

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -34,9 +32,7 @@ import ravis.bloodaid.R;
 import ravis.bloodaid.app.AppConfig;
 import ravis.bloodaid.app.AppController;
 import ravis.bloodaid.fragment.HomeFragment;
-import ravis.bloodaid.fragment.SettingsFragment;
 import ravis.bloodaid.helper.SQLiteHandler;
-import ravis.bloodaid.helper.SessionManager;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
@@ -45,18 +41,17 @@ public class PasswordChangeActivity extends Activity {
     private EditText sepass;
     private EditText trpass;
     private ProgressDialog pDialog;
-    private Button btnsave;
 
     private SQLiteHandler db;
-    private CheckBox mCbShowPwd;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.password_change);
-        fipass = (EditText) findViewById(R.id.name);
-        sepass = (EditText) findViewById(R.id.email);
-        trpass = (EditText) findViewById(R.id.mobile);
-        btnsave=(Button)findViewById(R.id.btnsave);
+        fipass = findViewById(R.id.name);
+        sepass = findViewById(R.id.email);
+        trpass = findViewById(R.id.mobile);
+        Button btnsave = findViewById(R.id.btnsave);
 
 
         db = new SQLiteHandler(getApplicationContext());
@@ -65,7 +60,7 @@ public class PasswordChangeActivity extends Activity {
         pDialog.setCancelable(false);
 
 
-        mCbShowPwd = (CheckBox) findViewById(R.id.cbShowPwd);
+        CheckBox mCbShowPwd = findViewById(R.id.cbShowPwd);
 
         mCbShowPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -99,7 +94,7 @@ public class PasswordChangeActivity extends Activity {
                     if(newpass.length()>=8 && newpass.length()<=20) {
                         if(isPasswordMatching(prepass,newpass)) {
                             if (isPasswordMatching(newpass, cpass)) {
-                                if (!isPasswordMatch(newpass, mobile)) {
+                                if (isPasswordMatch(newpass, mobile)) {
                                     changeUserpass(preemail, prepass, newpass);
                                 } else {
                                     Toast.makeText(getApplicationContext(),
@@ -130,25 +125,17 @@ public class PasswordChangeActivity extends Activity {
                 }
             }
 
-            public boolean isPasswordMatching(String password, String confirmPassword) {
+            boolean isPasswordMatching(String password, String confirmPassword) {
                 Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(confirmPassword);
 
-                if (!matcher.matches()) {
-                    // do your Toast("passwords are not matching");
-                    return false;
-                }
-                return true;
+                return matcher.matches();
             }
-            public boolean isPasswordMatch(String password, String mobile) {
+            boolean isPasswordMatch(String password, String mobile) {
                 Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(mobile);
 
-                if (!matcher.matches()) {
-                    // do your Toast("passwords are not matching");
-                    return false;
-                }
-                return true;
+                return !matcher.matches();
             }
 
 
@@ -176,7 +163,7 @@ public class PasswordChangeActivity extends Activity {
                 AppConfig.URL_Updatepassword, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
+                Log.d(TAG, "Register Response: " + response);
                 hideDialog();
 
                 try {
@@ -234,7 +221,7 @@ public class PasswordChangeActivity extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("preemail",preemail);
                 params.put("prepass", prepass);
                 params.put("newpass", newpass);

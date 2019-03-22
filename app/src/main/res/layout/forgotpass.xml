@@ -21,7 +21,8 @@
             android:layout_height="120dp"
             android:id="@+id/imageView"
             android:src="@drawable/logo2"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="TODO" />
 
         <EditText
             android:id="@+id/email"

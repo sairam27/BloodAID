@@ -66,7 +66,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_LOCATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATION);
         // Create tables again
         onCreate(db);
     }
@@ -74,7 +74,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public boolean storelocation(String latitude,String longitude) {
+    public void storelocation(String latitude, String longitude) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -86,7 +86,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
 
         Log.d(TAG, "New Location inserted into sqlite: " + id);
-        return true;
     }
 
     public boolean addUser(String name, String email, String mobile, String uid, String created_at) {
@@ -129,7 +128,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 
     public HashMap<String, String> getUserDetails() {
-        HashMap<String, String> user = new HashMap<String, String>();
+        HashMap<String, String> user = new HashMap<>();
         String selectQuery = "SELECT  * FROM " + TABLE_USER;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -151,7 +150,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return user;
     }
     public HashMap<String, String> getLocationDetails() {
-        HashMap<String, String> loc = new HashMap<String, String>();
+        HashMap<String, String> loc = new HashMap<>();
         String selectQuery = "SELECT  * FROM " + TABLE_LOCATION;
 
         SQLiteDatabase db = this.getReadableDatabase();

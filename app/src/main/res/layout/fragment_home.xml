@@ -10,7 +10,8 @@
         android:layout_height="100dp"
         android:layout_gravity="top"
         android:alpha="0.3"
-        android:src="@drawable/ic_home_black_24dp" />
+        android:src="@drawable/ic_home_black_24dp"
+        android:contentDescription="TODO" />
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"

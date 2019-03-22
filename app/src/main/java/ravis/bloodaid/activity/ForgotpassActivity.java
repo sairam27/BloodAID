@@ -29,28 +29,25 @@ import ravis.bloodaid.helper.SessionManager;
 
 public class ForgotpassActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
-    private Button btngetpass;
-    private Button btnLinkToLoginScreen;
     private EditText inputEmail;
     private ProgressDialog pDialog;
     private SessionManager session;
-    private SQLiteHandler db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forgotpass);
 
-        inputEmail = (EditText) findViewById(R.id.email);
-        btngetpass = (Button) findViewById(R.id.btngetpass);
-        btnLinkToLoginScreen = (Button) findViewById(R.id.btnLinkToLoginScreen);
+        inputEmail = findViewById(R.id.email);
+        Button btngetpass = findViewById(R.id.btngetpass);
+        Button btnLinkToLoginScreen = findViewById(R.id.btnLinkToLoginScreen);
 
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
         // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        SQLiteHandler db = new SQLiteHandler(getApplicationContext());
 
         btngetpass.setOnClickListener(new View.OnClickListener() {
 
@@ -101,7 +98,7 @@ public class ForgotpassActivity extends Activity {
                 AppConfig.URL_FORGETPASS, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Login Response: " + response.toString());
+                Log.d(TAG, "Login Response: " + response);
                 hideDialog();
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -139,7 +136,7 @@ public class ForgotpassActivity extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("email", email);
 
                 return params;

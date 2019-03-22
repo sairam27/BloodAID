@@ -44,14 +44,14 @@ import java.util.Map;
 
 public class Outview1 extends Activity {
 
-    private static String TAG = Outview1.class.getSimpleName();
+    private static final String TAG = Outview1.class.getSimpleName();
 
     // Progress dialog
     private ProgressDialog pDialog;
     private SQLiteHandler db;
 
     private ListView lv;
-    ArrayList<HashMap<String, String>> contactList;
+    private ArrayList<HashMap<String, String>> contactList;
 
     @Override
     public void onBackPressed() {
@@ -72,7 +72,7 @@ public class Outview1 extends Activity {
         contactList = new ArrayList<>();
 
 
-        lv = (ListView) findViewById(R.id.list);
+        lv = findViewById(R.id.list);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
@@ -97,7 +97,7 @@ public class Outview1 extends Activity {
     }
 
 
-    public void Location(final String email){
+    private void Location(final String email){
         String tag_string_req = "req_Location";
 
         pDialog.setMessage("Getting Location ...");
@@ -107,7 +107,7 @@ public class Outview1 extends Activity {
                 AppConfig.URL_Location, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
+                Log.d(TAG, "Register Response: " + response);
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
@@ -145,7 +145,7 @@ public class Outview1 extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("email", email);
                 return params;
             }
@@ -183,7 +183,7 @@ public class Outview1 extends Activity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
+                Log.d(TAG, "Register Response: " + response);
                 hidepDialog();
                 try {
                     JSONArray array = new JSONArray(response);
@@ -236,7 +236,7 @@ public class Outview1 extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("spinner", spinner);
 
                 return params;
@@ -248,19 +248,19 @@ public class Outview1 extends Activity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
 
-        /**
-         * Updating parsed JSON data into ListView
-         * */
+        /*
+          Updating parsed JSON data into ListView
+          */
 
     }
 
 
-    public String getspinner(View view)
+    private String getspinner(View view)
     {
         return ((TextView)view.findViewById(R.id.spinner)).getText().toString().trim();
     }
 
-    public void notification(final String paramString, final View view)
+    private void notification(final String paramString, final View view)
     {
         String tag_string_req = "snd..notification";
         final String str1 = getspinner(view);
@@ -273,7 +273,7 @@ public class Outview1 extends Activity {
         {
             public void onResponse(String response)
             {
-                Log.d(Outview1.TAG, "Login Response: " + response.toString());
+                Log.d(Outview1.TAG, "Login Response: " + response);
                 try
                 {
                     JSONObject jObj = new JSONObject(response);
@@ -284,7 +284,6 @@ public class Outview1 extends Activity {
                     }
                     response = jObj.getString("error_msg");
                     Toast.makeText(Outview1.this.getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                    return;
                 }
                 catch (JSONException e)
                 {

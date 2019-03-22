@@ -10,7 +10,8 @@
         android:layout_height="100dp"
         android:layout_gravity="right"
         android:alpha="0.3"
-        android:src="@drawable/ic_settings_black_24dp" />
+        android:src="@drawable/ic_settings_black_24dp"
+        android:contentDescription="TODO" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -28,7 +29,8 @@
             android:paddingRight="20dp"
             android:layout_gravity="center_vertical"
             android:clickable="true"
-            android:layout_weight="0.21">
+            android:layout_weight="0.21"
+            android:focusable="true">
 
             <EditText
                 android:id="@+id/name"

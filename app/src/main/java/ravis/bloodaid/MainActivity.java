@@ -1,9 +1,10 @@
 package ravis.bloodaid;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -25,25 +26,21 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.HashMap;
+import java.util.Objects;
 
-import ravis.bloodaid.R;
 import ravis.bloodaid.activity.AboutUsActivity;
 
 import ravis.bloodaid.activity.LoginActivity;
-import ravis.bloodaid.activity.Outview1;
 import ravis.bloodaid.activity.PrivacyPolicyActivity;
 import ravis.bloodaid.fragment.*;
 import ravis.bloodaid.helper.SQLiteHandler;
-import ravis.bloodaid.helper.SessionManager;
 import ravis.bloodaid.other.CircleTransform;
 
 public class MainActivity extends AppCompatActivity {
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
-    private View navHeader;
     private ImageView imgNavHeaderBg, imgProfile;
-    private TextView txtName, txtWebsite;
     private Toolbar toolbar;
     private FloatingActionButton fab;
 
@@ -53,20 +50,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String urlProfileImg = "";
 
     // index to identify current nav menu item
-    public static int navItemIndex = 0;
+    private static int navItemIndex = 0;
 
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
 
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_SETTINGS = "settings";
-    public static String CURRENT_TAG = TAG_HOME;
+    private static String CURRENT_TAG = TAG_HOME;
 
     // toolbar titles respected to selected nav menu item
     private String[] activityTitles;
 
-    // flag to load home fragment when user presses back key
-    private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
     private SQLiteHandler db;
@@ -78,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -91,16 +86,16 @@ public class MainActivity extends AppCompatActivity {
 
         mHandler = new Handler();
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        fab = findViewById(R.id.fab);
 
         // Navigation view header
-        navHeader = navigationView.getHeaderView(0);
-        txtName = (TextView) navHeader.findViewById(R.id.name);
-        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
-        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
-        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
+        View navHeader = navigationView.getHeaderView(0);
+        TextView txtName = navHeader.findViewById(R.id.name);
+        TextView txtWebsite = navHeader.findViewById(R.id.website);
+        imgNavHeaderBg = navHeader.findViewById(R.id.img_header_bg);
+        imgProfile = navHeader.findViewById(R.id.img_profile);
 
         txtName.setText(name);
         txtWebsite.setText(email);
@@ -129,22 +124,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-    public void onFragmentMessage(String TAG, Object data){
-        if (TAG.equals("TAGFragment1")){
-            //Do something with 'data' that comes from fragment1
-        }
-        else if (TAG.equals("TAGFragment2")){
-            //Do something with 'data' that comes from fragment2
-        }
-    }
-
-    /***
-     * Load navigation menu header information
-     * like background image, profile image
-     * name, website, notifications action view (dot)
-     */
     private void loadNavHeader() {
 
         // loading header background image
@@ -204,9 +183,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // If mPendingRunnable is not null, then add to the message queue
-        if (mPendingRunnable != null) {
-            mHandler.post(mPendingRunnable);
-        }
+        mHandler.post(mPendingRunnable);
 
         // show or hide the fab button
         toggleFab();
@@ -222,24 +199,22 @@ public class MainActivity extends AppCompatActivity {
         switch (navItemIndex) {
             case 0:
                 // home
-                HomeFragment homeFragment = new HomeFragment();
-                return homeFragment;
+                return new HomeFragment();
             case 1:
                 // notifications fragment
-                NotificationsFragment notificationsFragment = new NotificationsFragment();
-                return notificationsFragment;
+                return new NotificationsFragment();
 
             case 2:
                 // settings fragment
-                SettingsFragment settingsFragment = new SettingsFragment();
-                return settingsFragment;
+                return new SettingsFragment();
             default:
                 return new HomeFragment();
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(activityTitles[navItemIndex]);
     }
 
     private void selectNavMenu() {
@@ -300,17 +275,6 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
-                super.onDrawerClosed(drawerView);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-                super.onDrawerOpened(drawerView);
-            }
         };
 
         //Setting the actionbarToggle to drawer layout
@@ -329,15 +293,15 @@ public class MainActivity extends AppCompatActivity {
 
         // This code loads home fragment when back key is pressed
         // when user is in other fragment than home
-        if (shouldLoadHomeFragOnBackPress) {
-            // checking if user is on other navigation menu
-            // rather than home
-            if (navItemIndex != 0) {
-                navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
-                loadHomeFragment();
-                return;
-            }
+        // flag to load home fragment when user presses back key
+        boolean shouldLoadHomeFragOnBackPress = true;
+        // checking if user is on other navigation menu
+        // rather than home
+        if (navItemIndex != 0) {
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_HOME;
+            loadHomeFragment();
+            return;
         }
 
         super.onBackPressed();

@@ -10,12 +10,11 @@ import ravis.bloodaid.R;
 
 public class PrivacyPolicyActivity extends AppCompatActivity {
 
-    private TextView text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
-        text=(TextView)findViewById(R.id.textView2);
+        TextView text = findViewById(R.id.textView2);
         text.setText("This Privacy Policy governs the manner in which Blooaid collects, uses, maintains and discloses information collected from users (each, a \"User\") of the http://www.bloodaid.3eeweb.com/ website (\"Site\").\n" +
                 "\n" +
                 "Personal identification information\n" +

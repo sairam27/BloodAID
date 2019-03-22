@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -20,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 
-import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -36,7 +31,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ravis.bloodaid.R;
 import ravis.bloodaid.*;
 import ravis.bloodaid.app.AppConfig;
 import ravis.bloodaid.app.AppController;
@@ -46,14 +40,11 @@ import ravis.bloodaid.helper.SessionManager;
 public class RegisterActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
-    private Button btnRegister;
-    private Button btnLinkToLogin;
     private EditText inputFullName;
     private EditText inputEmail;
     private EditText inputPassword;
     private EditText inputmobile;
     private ProgressDialog pDialog;
-    private SessionManager session;
     private SQLiteHandler db;
     private Spinner inputspinner;
     private EditText incpassword;
@@ -65,14 +56,14 @@ public class RegisterActivity extends Activity implements AdapterView.OnItemSele
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        incpassword = (EditText) findViewById(R.id.cpassword);
-        inputspinner = (Spinner) findViewById(R.id.spinner);
-        inputFullName = (EditText) findViewById(R.id.name);
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
-        inputmobile = (EditText) findViewById(R.id.mobile);
-        btnRegister = (Button) findViewById(R.id.btnRegister);
-        btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
+        incpassword = findViewById(R.id.cpassword);
+        inputspinner = findViewById(R.id.spinner);
+        inputFullName = findViewById(R.id.name);
+        inputEmail = findViewById(R.id.email);
+        inputPassword = findViewById(R.id.password);
+        inputmobile = findViewById(R.id.mobile);
+        Button btnRegister = findViewById(R.id.btnRegister);
+        Button btnLinkToLogin = findViewById(R.id.btnLinkToLoginScreen);
 
         inputspinner.setOnItemSelectedListener(this);
 
@@ -101,7 +92,7 @@ public class RegisterActivity extends Activity implements AdapterView.OnItemSele
         pDialog.setCancelable(false);
 
         // Session manager
-        session = new SessionManager(getApplicationContext());
+        SessionManager session = new SessionManager(getApplicationContext());
 
         // SQLite database handler
         db = new SQLiteHandler(getApplicationContext());
@@ -135,7 +126,7 @@ public class RegisterActivity extends Activity implements AdapterView.OnItemSele
                             if (isPasswordMatching(password, cpassword)) {
                                 if(mobile.length()>=10 && mobile.length()<=12) {
                                     if (mobile.matches("^[789]\\d{9}$")) {
-                                        if (!isPasswordMatch(password, mobile)) {
+                                        if (isPasswordMatch(password, mobile)) {
                                             registerUser(name, email, password, mobile, spinner);
                                         } else {
                                             Toast.makeText(getApplicationContext(),
@@ -176,25 +167,17 @@ public class RegisterActivity extends Activity implements AdapterView.OnItemSele
             private boolean isValidEmail(CharSequence email) {
                 return Patterns.EMAIL_ADDRESS.matcher(email).matches();
             }
-            public boolean isPasswordMatching(String password, String confirmPassword) {
+            boolean isPasswordMatching(String password, String confirmPassword) {
                 Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(confirmPassword);
 
-                if (!matcher.matches()) {
-                    // do your Toast("passwords are not matching");
-                    return false;
-                }
-                return true;
+                return matcher.matches();
             }
-            public boolean isPasswordMatch(String password, String mobile) {
+            boolean isPasswordMatch(String password, String mobile) {
                 Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(mobile);
 
-                if (!matcher.matches()) {
-                    // do your Toast("passwords are not matching");
-                    return false;
-                }
-                return true;
+                return !matcher.matches();
             }
 
 
@@ -250,7 +233,7 @@ public class RegisterActivity extends Activity implements AdapterView.OnItemSele
             AppConfig.URL_REGISTER, new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-            Log.d(TAG, "Register Response: " + response.toString());
+            Log.d(TAG, "Register Response: " + response);
             hideDialog();
 
             try {
@@ -306,7 +289,7 @@ public class RegisterActivity extends Activity implements AdapterView.OnItemSele
         @Override
         protected Map<String, String> getParams() {
             // Posting params to register url
-            Map<String, String> params = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<>();
             params.put("name", name);
             params.put("email", email);
             params.put("password", password);

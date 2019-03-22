@@ -1,7 +1,6 @@
 package ravis.bloodaid.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,18 +24,13 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import ravis.bloodaid.MainActivity;
 import ravis.bloodaid.R;
 import ravis.bloodaid.activity.LoginActivity;
 import ravis.bloodaid.activity.PasswordChangeActivity;
-import ravis.bloodaid.activity.RegisterActivity;
 import ravis.bloodaid.app.AppConfig;
 import ravis.bloodaid.app.AppController;
 import ravis.bloodaid.helper.SQLiteHandler;
-import ravis.bloodaid.helper.SessionManager;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
@@ -54,17 +48,11 @@ public class SettingsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private EditText ename;
     private EditText eemail;
     private EditText emobile;
 
-    private Button btnedit;
     private Button btnsave;
-    private Button btnchangepass;
     private SQLiteHandler db;
     private ProgressDialog pDialog;
 
@@ -100,8 +88,9 @@ public class SettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -110,20 +99,20 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        ename=(EditText)view.findViewById(R.id.name);
-        eemail=(EditText)view.findViewById(R.id.email);
-        emobile=(EditText)view.findViewById(R.id.mobile);
+        ename= view.findViewById(R.id.name);
+        eemail= view.findViewById(R.id.email);
+        emobile= view.findViewById(R.id.mobile);
         ename.setEnabled(false);
         eemail.setEnabled(false);
         emobile.setEnabled(false);
 
-        btnchangepass = (Button)view.findViewById(R.id.passchange);
-        btnedit = (Button)view.findViewById(R.id.btnedit);
-        btnsave = (Button)view.findViewById(R.id.savechanges);
+        Button btnchangepass = view.findViewById(R.id.passchange);
+        Button btnedit = view.findViewById(R.id.btnedit);
+        btnsave = view.findViewById(R.id.savechanges);
         pDialog = new ProgressDialog(this.getActivity());
         pDialog.setCancelable(false);
-        btnsave.setVisibility(view.GONE);
-        temp =(Button)view.findViewById(R.id.buttontemp);
+        btnsave.setVisibility(View.GONE);
+        temp = view.findViewById(R.id.buttontemp);
 
         db = new SQLiteHandler(getActivity().getApplicationContext());
 
@@ -145,7 +134,7 @@ public class SettingsFragment extends Fragment {
                 ename.setEnabled(true);
                 eemail.setEnabled(true);
                 emobile.setEnabled(true);
-                btnsave.setVisibility(view1.VISIBLE);
+                btnsave.setVisibility(View.VISIBLE);
             }
         });
         temp.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +143,7 @@ public class SettingsFragment extends Fragment {
                 ename.setEnabled(false);
                 eemail.setEnabled(false);
                 emobile.setEnabled(false);
-                btnsave.setVisibility(view.GONE);
+                btnsave.setVisibility(View.GONE);
             }
         });
 
@@ -235,7 +224,7 @@ public class SettingsFragment extends Fragment {
                 AppConfig.URL_Update, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
+                Log.d(TAG, "Register Response: " + response);
                 hideDialog();
 
                 try {
@@ -295,7 +284,7 @@ public class SettingsFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("preemail",preemail);
                 params.put("name", name);
                 params.put("email", email);
@@ -325,17 +314,6 @@ public class SettingsFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override

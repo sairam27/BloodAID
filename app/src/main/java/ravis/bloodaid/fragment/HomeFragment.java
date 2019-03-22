@@ -1,6 +1,5 @@
 package ravis.bloodaid.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ravis.bloodaid.MainActivity;
 import ravis.bloodaid.R;
 import ravis.bloodaid.activity.LoginActivity;
 import ravis.bloodaid.activity.MapsActivity;
@@ -41,16 +39,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
-    private TextView txtName;
-    private TextView txtEmail;
-    private Button btnview;
-    private Button gps;
     private static Spinner inputspinner;
     private static SessionManager session;
 
@@ -83,8 +73,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -94,12 +85,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
-        gps = (Button) view.findViewById(R.id.gps);
-        txtName = (TextView) view.findViewById(R.id.name);
-        txtEmail = (TextView) view.findViewById(R.id.email);
+        Button gps = view.findViewById(R.id.gps);
+        TextView txtName = view.findViewById(R.id.name);
+        TextView txtEmail = view.findViewById(R.id.email);
 
-        btnview = (Button) view.findViewById(R.id.view);
-        inputspinner= (Spinner)view.findViewById(R.id.spinner);
+        Button btnview = view.findViewById(R.id.view);
+        inputspinner= view.findViewById(R.id.spinner);
 
         inputspinner.setOnItemSelectedListener(this);
 
@@ -178,7 +169,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
      * Logging out the user. Will set isLoggedIn flag to false in shared
      * preferences Clears the user data from sqlite users table
      * */
-    public void logoutUser() {
+    private void logoutUser() {
         session.setLogin(false);
 
         db.deleteUsers();
@@ -195,17 +186,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
@@ -233,8 +213,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     public static String bloodgroup(){
-        String spinner = inputspinner.getSelectedItem().toString();
-        return spinner;
+        return inputspinner.getSelectedItem().toString();
     }
 
     /**
